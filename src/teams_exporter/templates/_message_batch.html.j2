@@ -1,0 +1,39 @@
+<section class="message-batch" data-start-day="{{ start_day }}" data-end-day="{{ end_day }}">
+  {% set ns = namespace(day="") %}
+  {% for m in messages %}
+    {% set day_key = m.created|day_key %}
+    {% set day_label = m.created|day %}
+    {% if day_key and day_key != ns.day %}
+      <div class="day-sep" data-day="{{ day_key }}"><span>{{ day_label }}</span></div>
+      {% set ns.day = day_key %}
+    {% endif %}
+    <div class="msg {{ 'mine' if m.is_mine else 'theirs' }}" data-message-id="{{ m.id }}" data-day="{{ day_key }}">
+      <span class="avatar sm">
+        {% if avatars.get(m.author_id) %}
+          <img src="{{ avatar_prefix }}{{ avatars.get(m.author_id) }}" alt="">
+        {% else %}{{ m.author_name|initials }}{% endif %}
+      </span>
+      <div class="bubble-wrap">
+        {% if not m.is_mine %}<div class="author">{{ m.author_name }}</div>{% endif %}
+        <div class="bubble {{ 'deleted' if m.deleted else '' }}">
+          {% if m.deleted %}
+            <em>Deleted message</em>
+          {% else %}
+            <div class="body">{{ m.body_html|safe_html }}</div>
+            {% for a in m.attachments %}
+              <div class="attachment">
+                📎
+                {% if a.local_path %}
+                  <a href="{{ a.local_path }}" target="_blank" rel="noopener noreferrer">{{ a.name }}</a>
+                {% elif a.url %}
+                  <a href="{{ a.url }}" target="_blank" rel="noopener noreferrer">{{ a.name }} (link)</a>
+                {% else %}{{ a.name }}{% endif %}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="time">{{ m.created|dt }}</div>
+      </div>
+    </div>
+  {% endfor %}
+</section>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <title>{{ conv.title }} — Teams Exporter</title>
+  <link rel="stylesheet" href="../../style.css">
+  <script src="../../app.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    {% include "_sidebar.html.j2" %}
+
+    <main class="content">
+      <header class="chat-header">
+        <span class="avatar">{{ conv.title|initials }}</span>
+        <div>
+          <div class="chat-title">{{ conv.title }}</div>
+          <div class="chat-sub">
+            {{ conv.members|length }} participant(s) ·
+            {% if conv.chat_type == "group" %}group
+            {% elif conv.chat_type == "oneOnOne" %}one-to-one chat
+            {% else %}{{ conv.chat_type }}{% endif %} ·
+            {{ conv.messages|length }} message(s)
+          </div>
+        </div>
+      </header>
+
+      <details class="participants">
+        <summary>👥 {{ conv.members|length }} participant(s)</summary>
+        <div class="participant-grid">
+          {% for m in conv.members %}
+          <div class="participant-card">
+            <span class="avatar">
+              {% if m.avatar %}<img src="../../{{ m.avatar }}" alt="">
+              {% else %}{{ m.name|initials }}{% endif %}
+            </span>
+            <div class="p-info">
+              <div class="p-name">
+                {{ m.name }}{% if m.is_me %} <span class="p-badge">me</span>{% endif %}
+              </div>
+              {% if m.job_title or m.department %}
+                <div class="p-line">{{ [m.job_title, m.department]|select|join(' · ') }}</div>
+              {% endif %}
+              {% if m.company %}<div class="p-line">🏢 {{ m.company }}</div>{% endif %}
+              {% if m.email %}
+                <div class="p-line">✉️ <a href="mailto:{{ m.email }}">{{ m.email }}</a></div>
+              {% elif m.upn %}<div class="p-line">✉️ {{ m.upn }}</div>{% endif %}
+              {% if m.office or m.city or m.country %}
+                <div class="p-line">📍 {{ [m.office, m.city, m.country]|select|join(', ') }}</div>
+              {% endif %}
+              {% if m.mobile %}<div class="p-line">📱 {{ m.mobile }}</div>{% endif %}
+              {% for ph in m.phones %}<div class="p-line">☎️ {{ ph }}</div>{% endfor %}
+              {% if m.language %}<div class="p-line p-muted">{{ m.language }}</div>{% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </details>
+
+      <div class="messages" data-message-scroller>
+        {% if conv.messages %}
+          <div class="message-loader" data-message-loader {% if not older_message_count %}hidden{% endif %}>
+            <button
+              class="secondary-button"
+              type="button"
+              data-load-older-messages
+              data-next-chunk="{{ next_chunk or '' }}"
+            >
+              Load earlier messages
+            </button>
+            <span data-remaining-messages>{{ older_message_count }} earlier message(s)</span>
+          </div>
+          <div class="message-batches" data-message-batches>
+            {% set messages = initial_messages %}
+            {% set avatar_prefix = "../../" %}
+            {% set start_day = initial_messages[0].created|day_key %}
+            {% set end_day = initial_messages[-1].created|day_key %}
+            {% include "_message_batch.html.j2" %}
+          </div>
+        {% else %}
+          <p class="empty">No messages.</p>
+        {% endif %}
+      </div>
+
+      {% if conv.messages %}
+        <nav class="conversation-navigation" aria-label="Conversation navigation">
+          <button type="button" title="Go to the earliest loaded message" aria-label="Go to the earliest loaded message" data-scroll-messages-top>↑</button>
+          <button type="button" title="Go to the latest message" aria-label="Go to the latest message" data-scroll-messages-bottom>↓</button>
+        </nav>
+      {% endif %}
+    </main>
+  </div>
+</body>
+</html>

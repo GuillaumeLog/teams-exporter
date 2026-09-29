@@ -1,0 +1,56 @@
+[project]
+name = "teams-exporter"
+version = "0.1.0"
+description = "Export and clean up direct Microsoft Teams messages and notifications"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+keywords = ["microsoft-graph", "microsoft-teams", "export", "cli"]
+classifiers = [
+    "Environment :: Console",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Communications :: Chat",
+]
+dependencies = [
+    "msal>=1.31",
+    "httpx>=0.27",
+    "jinja2>=3.1",
+    "nh3>=0.2.20",
+    "platformdirs>=4.3",
+    "pyyaml>=6.0",
+    "rich>=13.7",
+    "python-dateutil>=2.9",
+    "questionary>=2.0",
+]
+
+[project.scripts]
+teams-exporter = "teams_exporter.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/teams_exporter"]
+
+[dependency-groups]
+dev = [
+    "pip-audit>=2.9",
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "ruff>=0.12",
+]
+
+[tool.pytest.ini_options]
+addopts = "--strict-config --strict-markers"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B"]

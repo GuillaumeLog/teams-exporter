@@ -1,0 +1,48 @@
+# Teams Exporter configuration
+# Copy this file to `config.yaml` and customize the auth section.
+# See the Authentication section in README.md.
+
+auth:
+  # Authentication uses the built-in Microsoft Graph Command Line Tools public client.
+  # Tenant identifier: a GUID or domain such as "mycompanyalias.onmicrosoft.com".
+  # Recommended in corporate environments. Keep "organizations" if you do not know it.
+  tenant_id: "organizations"
+
+export:
+  # Output directory for the HTML export
+  output_dir: "output"
+  # Download participant avatars
+  download_avatars: true
+  # Download attachments and embedded images
+  download_attachments: true
+  # Optional filter. When empty or absent, process every conversation. Otherwise,
+  # provide chat IDs or fragments of a topic or participant name.
+  only:
+    []
+    # - "First Last"
+    # - "19:xxxxxxxxxxxxxxxxxxxx@thread.v2"
+  # Incremental mode: false completes an existing export; true rebuilds everything.
+  force: false
+
+purge:
+  # Purge is INTERACTIVE. Select conversations, review a complete summary, and confirm
+  # before deletion. Nothing is selected by default.
+  # Optional pre-filter for the conversations offered for selection. Empty means all.
+  only:
+    []
+    # - "First Last"
+  # Also delete files you sent from your own OneDrive, but only when they are inside
+  # the "Microsoft Teams Chat Files" folder.
+  delete_onedrive_files: true
+  # After an error-free purge, hide the conversation from your own chat history.
+  # This is reversible: the conversation returns when new activity occurs.
+  hide_when_cleaned: true
+
+notifications:
+  # EXPERIMENTAL / UNSUPPORTED: uses internal Teams client endpoints.
+  # Attempt to delete entries after marking them as read.
+  try_delete: true
+
+logging:
+  # DEBUG | INFO | WARNING | ERROR
+  level: "INFO"

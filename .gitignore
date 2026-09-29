@@ -1,0 +1,29 @@
+# Secrets and local configuration
+config.yaml
+.token_cache.bin
+.token_cache_*.bin
+*.bin
+.env
+.env.*
+!.env.example
+
+# Output
+output/
+*.log
+
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.uv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/

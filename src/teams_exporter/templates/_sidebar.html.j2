@@ -1,0 +1,136 @@
+<aside class="sidebar" data-sidebar>
+  <div class="sidebar-header">
+    <a class="logo" href="{{ root_prefix }}index.html" aria-label="Open the export home page">💬</a>
+    <div class="sidebar-heading">
+      <div class="sidebar-title">Conversations</div>
+      <div class="sidebar-sub" data-total-count>{{ conversations|length }} chat(s)</div>
+      <dl class="export-metadata">
+        <div>
+          <dt>Tenant</dt>
+          <dd title="{{ export_metadata.tenant }}">{{ export_metadata.tenant }}</dd>
+        </div>
+        <div>
+          <dt>Signed in as</dt>
+          <dd title="{{ export_metadata.signed_in_as }}">{{ export_metadata.signed_in_as }}</dd>
+        </div>
+        <div>
+          <dt>Exported</dt>
+          <dd>{{ export_metadata.exported_at }}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <div class="sidebar-tools">
+    <label class="sr-only" for="conversation-search">Search conversations</label>
+    <input
+      id="conversation-search"
+      class="control search-input"
+      type="search"
+      placeholder="Search conversations…"
+      autocomplete="off"
+      data-conversation-search
+    >
+
+    <div class="control-row">
+      <label>
+        <span>Sort</span>
+        <select class="control" data-conversation-sort>
+          <option value="messages">Most messages</option>
+          <option value="recent">Most recent</option>
+          <option value="title">Name A–Z</option>
+          <option value="people">Most participants</option>
+        </select>
+      </label>
+      <label>
+        <span>Messages</span>
+        <select class="control" data-message-filter>
+          <option value="all">All</option>
+          <option value="with">With messages</option>
+          <option value="empty">Without messages</option>
+        </select>
+      </label>
+    </div>
+
+    <details class="advanced-filters">
+      <summary>More filters and display</summary>
+      <div class="advanced-filter-grid">
+        <label>
+          <span>Person</span>
+          <input
+            class="control"
+            type="search"
+            list="conversation-people"
+            placeholder="Any person"
+            autocomplete="off"
+            data-person-filter
+          >
+        </label>
+        <datalist id="conversation-people">
+          {% for person in people %}<option value="{{ person }}"></option>{% endfor %}
+        </datalist>
+
+        <label>
+          <span>Type</span>
+          <select class="control" data-type-filter>
+            <option value="all">All types</option>
+            <option value="oneOnOne">One-to-one</option>
+            <option value="group">Group</option>
+            <option value="meeting">Meeting</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Display</span>
+          <select class="control" data-density>
+            <option value="comfortable">Comfortable</option>
+            <option value="compact">Compact</option>
+          </select>
+        </label>
+
+        <button class="secondary-button" type="button" data-reset-filters>Reset</button>
+      </div>
+    </details>
+
+    <div class="result-summary" data-result-summary aria-live="polite"></div>
+  </div>
+
+  <nav class="conv-list" aria-label="Exported conversations" data-conversation-list>
+    {% for c in conversations %}
+      {% set meta = sidebar_data[c.id] %}
+      <a
+        class="conv-item {{ 'active' if c.id == current_id else '' }}"
+        href="{{ conversation_prefix }}{{ c.slug }}/index.html"
+        data-conversation-item
+        data-search="{{ meta.search }}"
+        data-people="{{ meta.people }}"
+        data-title="{{ c.title }}"
+        data-chat-type="{{ c.chat_type }}"
+        data-message-count="{{ c.messages|length }}"
+        data-person-count="{{ c.members|length }}"
+        data-last-activity="{{ c.last_activity }}"
+        data-original-index="{{ loop.index0 }}"
+      >
+        <span class="avatar-mini">
+          {% if c.list_avatar %}<img src="{{ root_prefix }}{{ c.list_avatar }}" alt="">
+          {% else %}{{ c.title|initials }}{% endif %}
+        </span>
+        <span class="conv-meta">
+          <span class="conv-name">{{ c.title }}</span>
+          <span class="conv-detail">
+            {% if c.chat_type == "group" %}group
+            {% elif c.chat_type == "oneOnOne" %}one-to-one
+            {% else %}{{ c.chat_type }}{% endif %}
+            · {{ c.messages|length }} msg
+          </span>
+        </span>
+      </a>
+    {% endfor %}
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="secondary-button load-more-conversations" type="button" data-load-more hidden>
+      Show more conversations
+    </button>
+  </div>
+</aside>
