@@ -17,6 +17,9 @@ The project currently provides three commands:
 > **Independent project:** This project is not affiliated with or supported by Microsoft.
 
 > [!WARNING]
+> **Data-loss risk:** Use this software at your own risk and back up any important data before running commands that modify remote content. The software is provided "as is" and, to the fullest extent permitted by law, its author and contributors are not liable for any data loss resulting from its use. See the [MIT License](LICENSE) for the full warranty and liability disclaimer.
+
+> [!WARNING]
 > `purge` modifies remote Microsoft 365 data. Review the command summary carefully before confirming any destructive operation.
 
 > [!CAUTION]
