@@ -13,17 +13,13 @@ The project currently provides three commands:
 - `purge` interactively soft-deletes your messages and eligible OneDrive files;
 - `notifications` experimentally marks activity-feed entries as read and attempts to delete them through unsupported internal Teams endpoints.
 
-> [!IMPORTANT]
-> **Independent project:** This project is not affiliated with or supported by Microsoft.
-
 > [!WARNING]
-> **Data-loss risk:** Use this software at your own risk and back up any important data before running commands that modify remote content. The software is provided "as is" and, to the fullest extent permitted by law, its author and contributors are not liable for any data loss resulting from its use. See the [MIT License](LICENSE) for the full warranty and liability disclaimer.
-
-> [!WARNING]
-> `purge` modifies remote Microsoft 365 data. Review the command summary carefully before confirming any destructive operation.
-
-> [!CAUTION]
-> `notifications` uses undocumented, unsupported internal Teams endpoints that Microsoft may change or remove without notice.
+> **Important notices**
+>
+> - This project is not affiliated with or supported by Microsoft.
+> - Use this software at your own risk and back up important data before running commands that modify remote content. The software is provided "as is" and, to the fullest extent permitted by law, its author and contributors are not liable for data loss resulting from its use. See the [MIT License](LICENSE) for the full disclaimer.
+> - `purge` modifies remote Microsoft 365 data. Review the command summary carefully before confirming any destructive operation.
+> - `notifications` uses undocumented, unsupported internal Teams endpoints that Microsoft may change or remove without notice.
 
 ## Table of contents
 
